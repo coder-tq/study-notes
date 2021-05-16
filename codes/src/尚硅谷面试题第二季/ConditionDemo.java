@@ -32,6 +32,7 @@ public class ConditionDemo {
 }
 
 class ShareResource{
+    //A:1 B:2 C:3
     private int number = 1;
     private Lock lock = new ReentrantLock();
     private Condition c1 = lock.newCondition();
@@ -41,23 +42,41 @@ class ShareResource{
     public void print(int time){
         lock.lock();
         try {
-            while(number!=1) {
-                c1.await();
-            }
-            while (number!=2){
-                c2.await();
-            }
-            while (number!=3){
-                c3.await();
-            }
-            for (int i = 0; i < time; i++) {
-                System.out.println(Thread.currentThread().getName()+" "+i);
-            }
-            switch (number){
-                case 1:c2.signal();break;
-                case 2:c3.signal();break;
-                case 3:c1.signal();break;
-                default:break;
+            switch (Thread.currentThread().getName()){
+                case "AA" : {
+                    while (number != 1){
+                        c1.await();
+                    }
+                    for (int i = 0; i < time; i++) {
+                        System.out.println(Thread.currentThread().getName()+" "+i);
+                    }
+                    number = 2;
+                    c2.signal();
+                    break;
+                }
+                case "BB" : {
+                    while (number != 2){
+                        c2.await();
+                    }
+                    for (int i = 0; i < time; i++) {
+                        System.out.println(Thread.currentThread().getName()+" "+i);
+                    }
+                    number = 3;
+                    c3.signal();
+                    break;
+                }
+                case "CC" : {
+                    while (number != 3){
+                        c3.await();
+                    }
+                    for (int i = 0; i < time; i++) {
+                        System.out.println(Thread.currentThread().getName()+" "+i);
+                    }
+                    number = 1;
+                    c1.signal();
+                    break;
+                }
+                default:
             }
         } catch (Exception e) {
             e.printStackTrace();
