@@ -1,3 +1,4 @@
+解决Maven下载慢的问题，修改settings中镜像地址为阿里云仓库
 ```xml
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
